@@ -2,6 +2,18 @@ import { Day, PrismaClient, UserSex } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  const alreadySeeded = await prisma.admin.findUnique({
+    where: { id: "admin1" },
+  });
+
+  if (alreadySeeded) {
+    console.log(
+      "Database already seeded. Skipping.\n" +
+        "To wipe and re-seed: npm run db:reset"
+    );
+    return;
+  }
+
   // ADMIN
   await prisma.admin.create({
     data: {

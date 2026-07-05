@@ -1,7 +1,7 @@
 import Announcements from "@/components/Announcements";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
 import FormContainer from "@/components/FormContainer";
-import Performance from "@/components/Performance";
+import PerformanceContainer from "@/components/PerformanceContainer";
 import StudentAttendanceCard from "@/components/StudentAttendanceCard";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
@@ -191,7 +191,9 @@ const SingleStudentPage = async ({
             </Link>
           </div>
         </div>
-        <Performance />
+        <Suspense fallback={<div className="h-80 animate-pulse bg-muted rounded-lg" />}>
+          <PerformanceContainer studentId={student.id} />
+        </Suspense>
         <Announcements />
       </div>
     </div>

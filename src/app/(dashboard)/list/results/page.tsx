@@ -2,6 +2,7 @@ import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
+import ListToolbar from "@/components/ListToolbar";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Prisma } from "@prisma/client";
@@ -78,7 +79,7 @@ const renderRow = (item: ResultList) => (
     className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
   >
     <td className="flex items-center gap-4 p-4">{item.title}</td>
-    <td>{item.studentName + " " + item.studentName}</td>
+    <td>{item.studentName + " " + item.studentSurname}</td>
     <td className="hidden md:table-cell">{item.score}</td>
     <td className="hidden md:table-cell">
       {item.teacherName + " " + item.teacherSurname}
@@ -185,25 +186,27 @@ const renderRow = (item: ResultList) => (
     prisma.result.count({ where: query }),
   ]);
 
-  const data = dataRes.map((item) => {
-    const assessment = item.exam || item.assignment;
+  const data = dataRes
+    .map((item) => {
+      const assessment = item.exam || item.assignment;
 
-    if (!assessment) return null;
+      if (!assessment) return null;
 
-    const isExam = "startTime" in assessment;
+      const isExam = "startTime" in assessment;
 
-    return {
-      id: item.id,
-      title: assessment.title,
-      studentName: item.student.name,
-      studentSurname: item.student.surname,
-      teacherName: assessment.lesson.teacher.name,
-      teacherSurname: assessment.lesson.teacher.surname,
-      score: item.score,
-      className: assessment.lesson.class.name,
-      startTime: isExam ? assessment.startTime : assessment.startDate,
-    };
-  });
+      return {
+        id: item.id,
+        title: assessment.title,
+        studentName: item.student.name,
+        studentSurname: item.student.surname,
+        teacherName: assessment.lesson.teacher.name,
+        teacherSurname: assessment.lesson.teacher.surname,
+        score: item.score,
+        className: assessment.lesson.class.name,
+        startTime: isExam ? assessment.startTime : assessment.startDate,
+      };
+    })
+    .filter((item): item is ResultList => item !== null);
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -213,12 +216,7 @@ const renderRow = (item: ResultList) => (
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
-            </button>
+            <ListToolbar />
             {(role === "admin" || role === "teacher") && (
               <FormContainer table="result" type="create" />
             )}

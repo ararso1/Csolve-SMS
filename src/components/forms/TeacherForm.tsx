@@ -9,7 +9,7 @@ import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
 import { useFormState } from "react-dom";
 import { createTeacher, updateTeacher } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { CldUploadWidget } from "next-cloudinary";
 
 const TeacherForm = ({
@@ -42,7 +42,6 @@ const TeacherForm = ({
   );
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
     formAction({ ...data, img: img?.secure_url });
   });
 
