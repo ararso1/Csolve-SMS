@@ -8,7 +8,9 @@ import {
   LayoutDashboard,
   Megaphone,
   MessageSquare,
+  ScrollText,
   Settings,
+  Shield,
   User,
   UserCheck,
   Users,
@@ -110,6 +112,23 @@ export const menuSections: { title: string; items: MenuItem[] }[] = [
         label: "Announcements",
         href: "/list/announcements",
         visible: ["admin", "teacher", "student", "parent"],
+      },
+    ],
+  },
+  {
+    title: "ADMIN",
+    items: [
+      {
+        icon: Shield,
+        label: "Permissions",
+        href: "/admin/permissions",
+        visible: ["admin"],
+      },
+      {
+        icon: ScrollText,
+        label: "Audit Logs",
+        href: "/admin/audit-logs",
+        visible: ["admin"],
       },
     ],
   },

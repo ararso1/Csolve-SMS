@@ -88,7 +88,8 @@ npx prisma db seed
 1. Create a Clerk application at [dashboard.clerk.com](https://dashboard.clerk.com)
 2. Copy API keys to `.env`
 3. Enable **Username** and **Email** as identifiers (Settings → User & Authentication → Email, Phone, Username). The `sync-clerk` script creates users with both username and email.
-4. **Critical for RBAC:** Customize session token (Sessions → Customize session token):
+4. **Local dev — Client Trust:** If sign-in asks for a verification code, that's Clerk **Client Trust** (Attack protection), not an app bug. Either enter the email code, or disable **Client Trust** in Clerk Dashboard → **Attack protection** for frictionless local login.
+5. **Critical for RBAC:** Customize session token (Sessions → Customize session token):
 
 ```json
 {
@@ -98,7 +99,7 @@ npx prisma db seed
 }
 ```
 
-5. Create test users manually in Clerk Dashboard with `publicMetadata`:
+6. Create test users manually in Clerk Dashboard with `publicMetadata`:
 
 ```json
 { "role": "admin" }
@@ -106,7 +107,7 @@ npx prisma db seed
 
 Roles: `admin`, `teacher`, `student`, `parent`
 
-6. Ensure Clerk user IDs match Prisma records (or use the in-app CRUD forms to create teachers/students which auto-sync)
+7. Ensure Clerk user IDs match Prisma records (or use the in-app CRUD forms to create teachers/students which auto-sync)
 
 ### 3.4 Run Development Server
 

@@ -9,6 +9,7 @@ import {
   actionSuccess,
   parseDeleteId,
   parseSchema,
+  recordAudit,
   teacherOwnsLesson,
 } from "./helpers";
 import { ActionState } from "./types";
@@ -32,7 +33,7 @@ export const createExam = async (
   }
 
   try {
-    await prisma.exam.create({
+    const created = await prisma.exam.create({
       data: {
         title: parsed.data.title,
         startTime: parsed.data.startTime,
@@ -40,6 +41,7 @@ export const createExam = async (
         lessonId: parsed.data.lessonId,
       },
     });
+    await recordAudit(authResult.ctx, "CREATE", "exam", created.id, parsed.data);
     revalidatePath("/list/exams");
     return actionSuccess();
   } catch {
@@ -76,6 +78,7 @@ export const updateExam = async (
         lessonId: parsed.data.lessonId,
       },
     });
+    await recordAudit(authResult.ctx, "UPDATE", "exam", parsed.data.id, parsed.data);
     revalidatePath("/list/exams");
     return actionSuccess();
   } catch {
@@ -105,6 +108,7 @@ export const deleteExam = async (
     }
 
     await prisma.exam.delete({ where: { id: parseInt(id as string) } });
+    await recordAudit(authResult.ctx, "DELETE", "exam", id);
     revalidatePath("/list/exams");
     return actionSuccess();
   } catch {

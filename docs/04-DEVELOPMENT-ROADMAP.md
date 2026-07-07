@@ -238,36 +238,36 @@ Production-grade security with granular permissions and external API access.
 ### Tasks
 
 #### 3.1 Advanced RBAC
-- [ ] Define permission matrix (resource × action × role)
-- [ ] `Permission` enum and `hasPermission(user, permission)` helper
+- [x] Define permission matrix (resource × action × role)
+- [x] `Permission` enum and `hasPermission(user, permission)` helper
 - [ ] Optional: database-driven roles for custom school configs
-- [ ] Admin UI to view (and later edit) role permissions
-- [ ] Re-enable teacher exam scoping with permission checks
+- [x] Admin UI to view (and later edit) role permissions
+- [x] Re-enable teacher exam scoping with permission checks
 
 #### 3.2 REST API (`/api/v1`)
-- [ ] API route structure with consistent response format
-- [ ] Clerk JWT verification middleware for API routes
-- [ ] Endpoints for all entities (CRUD + list with pagination)
-- [ ] OpenAPI/Swagger documentation
-- [ ] Rate limiting (Upstash Redis)
+- [x] API route structure with consistent response format
+- [x] Clerk JWT verification middleware for API routes
+- [x] Endpoints for all entities (list/read/delete + create for events/announcements)
+- [x] OpenAPI/Swagger documentation (`GET /api/v1/openapi`)
+- [x] Rate limiting (in-memory; Upstash Redis optional for production)
 
 #### 3.3 Audit & Security
-- [ ] `AuditLog` model and service
-- [ ] Log all create/update/delete with userId, timestamp, changes
-- [ ] Input sanitization for text fields
-- [ ] CSRF protection verification
-- [ ] Security headers middleware
+- [x] `AuditLog` model and service
+- [x] Log create/update/delete with userId, timestamp, changes (server actions + API)
+- [x] Input sanitization for text fields
+- [x] CSRF protection verification (Next.js Server Actions)
+- [x] Security headers middleware
 
 #### 3.4 Testing
-- [ ] Vitest for unit tests (services, permissions, validation)
+- [x] Vitest for unit tests (permissions, validation)
 - [ ] Integration tests for server actions with test database
 - [ ] Playwright E2E for critical flows (login, CRUD, RBAC)
 - [ ] Target: 70%+ coverage on business logic
 
 #### 3.5 Observability
-- [ ] Structured logging with Pino
-- [ ] Sentry error tracking
-- [ ] Health check endpoint (`/api/health`)
+- [x] Structured JSON logging (`src/lib/logger.ts`)
+- [ ] Sentry error tracking (wire `SENTRY_DSN` in a future pass)
+- [x] Health check endpoint (`/api/health`) with DB probe
 
 ### Phase 3 Deliverables
 - ✅ Granular RBAC enforced everywhere

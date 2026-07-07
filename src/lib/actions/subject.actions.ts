@@ -9,6 +9,7 @@ import {
   actionSuccess,
   parseDeleteId,
   parseSchema,
+  recordAudit,
 } from "./helpers";
 import { ActionState } from "./types";
 
@@ -23,7 +24,7 @@ export const createSubject = async (
   if (!parsed.ok) return parsed.state;
 
   try {
-    await prisma.subject.create({
+    const created = await prisma.subject.create({
       data: {
         name: parsed.data.name,
         teachers: {
@@ -31,6 +32,7 @@ export const createSubject = async (
         },
       },
     });
+    await recordAudit(authResult.ctx, "CREATE", "subject", created.id, parsed.data);
     revalidatePath("/list/subjects");
     return actionSuccess();
   } catch {
@@ -59,6 +61,7 @@ export const updateSubject = async (
         },
       },
     });
+    await recordAudit(authResult.ctx, "UPDATE", "subject", parsed.data.id, parsed.data);
     revalidatePath("/list/subjects");
     return actionSuccess();
   } catch {
@@ -78,6 +81,7 @@ export const deleteSubject = async (
 
   try {
     await prisma.subject.delete({ where: { id: parseInt(id as string) } });
+    await recordAudit(authResult.ctx, "DELETE", "subject", id);
     revalidatePath("/list/subjects");
     return actionSuccess();
   } catch {

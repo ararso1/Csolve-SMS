@@ -1,5 +1,7 @@
 import { Day } from "@prisma/client";
 import { z } from "zod";
+import { logAudit, type AuditAction } from "../audit";
+import type { AuthContext } from "../auth";
 import prisma from "../prisma";
 import { ActionState } from "./types";
 
@@ -12,6 +14,23 @@ export function actionError(
   fieldErrors?: Record<string, string[]>
 ): ActionState {
   return { success: false, error: true, message, fieldErrors };
+}
+
+export async function recordAudit(
+  ctx: AuthContext,
+  action: AuditAction,
+  entity: string,
+  entityId?: string | number | null,
+  changes?: Record<string, unknown> | null
+) {
+  await logAudit({
+    userId: ctx.userId,
+    userRole: ctx.role,
+    action,
+    entity,
+    entityId,
+    changes,
+  });
 }
 
 export function parseSchema<T>(
